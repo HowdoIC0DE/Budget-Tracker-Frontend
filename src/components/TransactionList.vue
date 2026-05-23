@@ -1,24 +1,12 @@
 <script setup>
-const transactions = [
-  {
-    id: 1,
-    title: "Miete",
-    amount: 650.0,
-    type: "EXPENSE"
-  },
-  {
-    id: 2,
-    title: "Gehalt",
-    amount: 1400.0,
-    type: "INCOME"
-  },
-  {
-    id: 3,
-    title: "Einkauf",
-    amount: 45.99,
-    type: "EXPENSE"
-  }
-]
+import { ref, onMounted } from 'vue'
+
+const transactions = ref([])
+
+onMounted(async () => {
+  const response = await fetch('https://budget-tracker-webtech.onrender.com/transactions')
+  transactions.value = await response.json()
+})
 </script>
 
 <template>
