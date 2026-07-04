@@ -4,35 +4,37 @@ import { createItem } from '../services/api'
 
 const emit = defineEmits(['saved'])
 
-const title = ref('')
+const name = ref('')
 const amount = ref('')
-const type = ref('EXPENSE')
-const date = ref('')
+const categoryId = ref('')
 const message = ref('')
 const error = ref('')
 const isSaving = ref(false)
 
-async function createTransaction() {
+async function createBudget() {
   message.value = ''
   error.value = ''
   isSaving.value = true
 
-  try {
-    await createItem('/transactions', {
-      title: title.value,
-      amount: Number(amount.value),
-      type: type.value,
-      date: date.value
-    })
+  const payload = {
+    name: name.value,
+    amount: Number(amount.value)
+  }
 
-    title.value = ''
+  if (categoryId.value) {
+    payload.categoryId = Number(categoryId.value)
+  }
+
+  try {
+    await createItem('/budgets', payload)
+
+    name.value = ''
     amount.value = ''
-    type.value = 'EXPENSE'
-    date.value = ''
+    categoryId.value = ''
     message.value = 'Gespeichert'
     emit('saved')
   } catch (err) {
-    error.value = err.message || 'Transaktion konnte nicht gespeichert werden.'
+    error.value = err.message || 'Budget konnte nicht gespeichert werden.'
   } finally {
     isSaving.value = false
   }
@@ -41,12 +43,12 @@ async function createTransaction() {
 
 <template>
   <section>
-    <h2>Neue Transaktion</h2>
+    <h2>Neues Budget</h2>
 
-    <form @submit.prevent="createTransaction">
+    <form @submit.prevent="createBudget">
       <label>
-        Titel
-        <input v-model="title" placeholder="z. B. Einkauf" required />
+        Name
+        <input v-model="name" placeholder="z. B. Monatsbudget" required />
       </label>
 
       <label>
@@ -55,16 +57,8 @@ async function createTransaction() {
       </label>
 
       <label>
-        Art
-        <select v-model="type">
-          <option value="EXPENSE">Ausgabe</option>
-          <option value="INCOME">Einnahme</option>
-        </select>
-      </label>
-
-      <label>
-        Datum
-        <input v-model="date" type="date" required />
+        Kategorie-ID (optional)
+        <input v-model="categoryId" type="number" min="1" placeholder="z. B. 1" />
       </label>
 
       <button type="submit" :disabled="isSaving">

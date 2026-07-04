@@ -4,35 +4,29 @@ import { createItem } from '../services/api'
 
 const emit = defineEmits(['saved'])
 
-const title = ref('')
-const amount = ref('')
+const name = ref('')
 const type = ref('EXPENSE')
-const date = ref('')
 const message = ref('')
 const error = ref('')
 const isSaving = ref(false)
 
-async function createTransaction() {
+async function createCategory() {
   message.value = ''
   error.value = ''
   isSaving.value = true
 
   try {
-    await createItem('/transactions', {
-      title: title.value,
-      amount: Number(amount.value),
-      type: type.value,
-      date: date.value
+    await createItem('/categories', {
+      name: name.value,
+      type: type.value
     })
 
-    title.value = ''
-    amount.value = ''
+    name.value = ''
     type.value = 'EXPENSE'
-    date.value = ''
     message.value = 'Gespeichert'
     emit('saved')
   } catch (err) {
-    error.value = err.message || 'Transaktion konnte nicht gespeichert werden.'
+    error.value = err.message || 'Kategorie konnte nicht gespeichert werden.'
   } finally {
     isSaving.value = false
   }
@@ -41,17 +35,12 @@ async function createTransaction() {
 
 <template>
   <section>
-    <h2>Neue Transaktion</h2>
+    <h2>Neue Kategorie</h2>
 
-    <form @submit.prevent="createTransaction">
+    <form @submit.prevent="createCategory">
       <label>
-        Titel
-        <input v-model="title" placeholder="z. B. Einkauf" required />
-      </label>
-
-      <label>
-        Betrag
-        <input v-model="amount" type="number" step="0.01" placeholder="0.00" required />
+        Name
+        <input v-model="name" placeholder="z. B. Lebensmittel" required />
       </label>
 
       <label>
@@ -60,11 +49,6 @@ async function createTransaction() {
           <option value="EXPENSE">Ausgabe</option>
           <option value="INCOME">Einnahme</option>
         </select>
-      </label>
-
-      <label>
-        Datum
-        <input v-model="date" type="date" required />
       </label>
 
       <button type="submit" :disabled="isSaving">

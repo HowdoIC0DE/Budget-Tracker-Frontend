@@ -4,13 +4,14 @@ import { mount } from '@vue/test-utils'
 import TransactionForm from '../components/TransactionForm.vue'
 
 describe('TransactionForm', () => {
-    it('renders input fields and submit button', () => {
-        const wrapper = mount(TransactionForm)
+  it('renders German input fields and submit button', () => {
+    const wrapper = mount(TransactionForm)
 
-        expect(wrapper.text()).toContain('Neue Transaktion')
-        expect(wrapper.find('input[placeholder="Titel"]').exists()).toBe(true)
-        expect(wrapper.find('input[placeholder="Betrag"]').exists()).toBe(true)
-        expect(wrapper.find('select').exists()).toBe(true)
-        expect(wrapper.find('button').text()).toBe('Speichern')
-    })
+    expect(wrapper.text()).toContain('Neue Transaktion')
+    expect(wrapper.text()).toContain('Titel')
+    expect(wrapper.text()).toContain('Betrag')
+    expect(wrapper.text()).toContain('Art')
+    expect(wrapper.find('input[placeholder="z. B. Einkauf"]').exists()).toBe(true)
+    expect(wrapper.find('button').text()).toBe('Speichern')
+  })
 })
