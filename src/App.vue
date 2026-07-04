@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import DashboardOverview from './components/DashboardOverview.vue'
 import TransactionForm from './components/TransactionForm.vue'
 import TransactionList from './components/TransactionList.vue'
 import CategoryForm from './components/CategoryForm.vue'
@@ -16,13 +17,15 @@ import PaymentMethodList from './components/PaymentMethodList.vue'
 import MerchantList from './components/MerchantList.vue'
 import TransactionNoteList from './components/TransactionNoteList.vue'
 
+const dashboardKey = ref(0)
 const transactionListKey = ref(0)
 const categoryListKey = ref(0)
 const accountListKey = ref(0)
 const budgetListKey = ref(0)
 const savingGoalListKey = ref(0)
 
-function refreshTransactionList() {
+function refreshTransactionData() {
+  dashboardKey.value += 1
   transactionListKey.value += 1
 }
 
@@ -44,186 +47,499 @@ function refreshSavingGoalList() {
 </script>
 
 <template>
-  <main>
-    <header class="hero">
-      <p class="eyebrow">WebTech Projekt</p>
-      <h1>Budget Tracker</h1>
-      <p>
-        Diese Seite zeigt die wichtigsten Funktionen der Haushalts-App: Transaktionen erfassen,
-        Kategorien und Konten verwalten, Budgets planen und Sparziele verfolgen.
-      </p>
-    </header>
-
-    <section class="use-case">
-      <h2>1. Einnahmen und Ausgaben</h2>
-      <p>Erfasse neue Transaktionen und prüfe die gespeicherten Einträge aus dem Backend.</p>
-
-      <div class="panel-grid">
-        <TransactionForm @saved="refreshTransactionList" />
-        <TransactionList :key="transactionListKey" />
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">BT</span>
+        <div>
+          <strong>Budget Tracker</strong>
+          <small>Finance Dashboard</small>
+        </div>
       </div>
-    </section>
 
-    <section class="use-case">
-      <h2>2. Kategorien und Konten</h2>
-      <p>Kategorien helfen beim Sortieren. Konten zeigen, wo das Geld liegt.</p>
+      <nav class="side-nav" aria-label="Hauptnavigation">
+        <a href="#uebersicht">Übersicht</a>
+        <a href="#transaktionen">Transaktionen</a>
+        <a href="#kategorien-konten">Kategorien & Konten</a>
+        <a href="#budgets-sparziele">Budgets & Sparziele</a>
+        <a href="#weitere-daten">Weitere Daten</a>
+      </nav>
+    </aside>
 
-      <div class="panel-grid">
-        <CategoryForm @saved="refreshCategoryList" />
-        <CategoryList :key="categoryListKey" />
-        <AccountForm @saved="refreshAccountList" />
-        <AccountList :key="accountListKey" />
-      </div>
-    </section>
+    <main class="dashboard-main">
+      <section id="uebersicht" class="hero-section">
+        <div class="hero-copy">
+          <p class="eyebrow">WebTech Projekt</p>
+          <h1>Budget Tracker</h1>
+          <p>
+            Ein kompaktes Finanz-Dashboard für Transaktionen, Konten, Budgets und Sparziele.
+          </p>
+          <div class="hero-actions" aria-label="Projektstatus">
+            <span class="status-pill online">Backend verbunden</span>
+            <span class="status-pill">Vue 3 + Vite</span>
+          </div>
+        </div>
 
-    <section class="use-case">
-      <h2>3. Budgets und Sparziele</h2>
-      <p>Plane Limits für Ausgaben und halte einfache Sparziele fest.</p>
+        <DashboardOverview :key="dashboardKey" />
+      </section>
 
-      <div class="panel-grid">
-        <BudgetForm @saved="refreshBudgetList" />
-        <BudgetList :key="budgetListKey" />
-        <SavingGoalForm @saved="refreshSavingGoalList" />
-        <SavingGoalList :key="savingGoalListKey" />
-      </div>
-    </section>
+      <section id="transaktionen" class="dashboard-section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">Wichtigster Ablauf</span>
+            <h2>Transaktionen</h2>
+          </div>
+          <p>Einnahmen und Ausgaben erfassen, prüfen und im Blick behalten.</p>
+        </div>
 
-    <section class="use-case">
-      <h2>4. Weitere Budget-Daten</h2>
-      <p>Diese Listen zeigen weitere Backend-Bereiche, die das Budget Tracker Projekt unterstützt.</p>
+        <div class="panel-grid transaction-grid">
+          <TransactionForm class="priority-card" @saved="refreshTransactionData" />
+          <TransactionList :key="transactionListKey" class="wide-card" />
+        </div>
+      </section>
 
-      <div class="panel-grid compact">
-        <BudgetPeriodList />
-        <RecurringTransactionList />
-        <PaymentMethodList />
-        <MerchantList />
-        <TransactionNoteList />
-      </div>
-    </section>
-  </main>
+      <section id="kategorien-konten" class="dashboard-section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">Struktur</span>
+            <h2>Kategorien & Konten</h2>
+          </div>
+          <p>Kategorien ordnen Ausgaben ein. Konten zeigen, wo Geld liegt.</p>
+        </div>
+
+        <div class="panel-grid">
+          <CategoryForm @saved="refreshCategoryList" />
+          <CategoryList :key="categoryListKey" />
+          <AccountForm @saved="refreshAccountList" />
+          <AccountList :key="accountListKey" />
+        </div>
+      </section>
+
+      <section id="budgets-sparziele" class="dashboard-section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">Planung</span>
+            <h2>Budgets & Sparziele</h2>
+          </div>
+          <p>Limits planen, Fortschritt sichtbar machen und Ziele festhalten.</p>
+        </div>
+
+        <div class="panel-grid">
+          <BudgetForm @saved="refreshBudgetList" />
+          <BudgetList :key="budgetListKey" />
+          <SavingGoalForm @saved="refreshSavingGoalList" />
+          <SavingGoalList :key="savingGoalListKey" />
+        </div>
+      </section>
+
+      <section id="weitere-daten" class="dashboard-section">
+        <div class="section-header compact-header">
+          <div>
+            <span class="section-kicker">Erweitertes Backend</span>
+            <h2>Weitere Daten</h2>
+          </div>
+          <p>Kompakte Übersicht über zusätzliche Budget-Tracker-Entitäten.</p>
+        </div>
+
+        <div class="panel-grid compact">
+          <BudgetPeriodList />
+          <RecurringTransactionList />
+          <PaymentMethodList />
+          <MerchantList />
+          <TransactionNoteList />
+        </div>
+      </section>
+    </main>
+  </div>
 </template>
 
 <style>
 :root {
-  color: #1e293b;
-  background: #f4f7fb;
-  font-family: Arial, Helvetica, sans-serif;
+  color: #e5eef9;
+  background: #080d16;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --bg: #080d16;
+  --panel: #101827;
+  --panel-strong: #162133;
+  --panel-soft: #0d1420;
+  --border: rgba(148, 163, 184, 0.2);
+  --border-strong: rgba(148, 163, 184, 0.32);
+  --text: #e5eef9;
+  --muted: #91a0b8;
+  --muted-strong: #b7c3d7;
+  --green: #35d399;
+  --green-dark: #15936a;
+  --red: #fb7185;
+  --blue: #60a5fa;
+  --purple: #a78bfa;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
+  min-width: 320px;
   margin: 0;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(35, 49, 75, 0.3), rgba(8, 13, 22, 0) 360px),
+    var(--bg);
 }
 
-main {
-  width: min(1120px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 32px 0 48px;
+a {
+  color: inherit;
 }
 
-.hero {
-  margin-bottom: 32px;
-  padding: 28px;
-  color: white;
-  background: #224466;
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  display: grid;
+  gap: 28px;
+  height: 100vh;
+  padding: 28px 20px;
+  background: rgba(8, 13, 22, 0.86);
+  border-right: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #07110d;
+  background: var(--green);
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+.brand strong,
+.brand small {
+  display: block;
+}
+
+.brand small {
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+.side-nav {
+  display: grid;
+  gap: 8px;
+}
+
+.side-nav a {
+  padding: 11px 12px;
+  color: var(--muted-strong);
+  text-decoration: none;
+  border: 1px solid transparent;
   border-radius: 8px;
 }
 
-.hero h1 {
+.side-nav a:hover,
+.side-nav a:focus-visible {
+  color: var(--text);
+  background: rgba(96, 165, 250, 0.1);
+  border-color: var(--border);
+  outline: none;
+}
+
+.dashboard-main {
+  width: min(1220px, 100%);
+  padding: 28px;
+}
+
+.hero-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1fr);
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 34px;
+}
+
+.hero-copy {
+  display: grid;
+  align-content: center;
+  min-height: 300px;
+  padding: 30px;
+  background:
+    linear-gradient(135deg, rgba(53, 211, 153, 0.14), rgba(96, 165, 250, 0.1)),
+    var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.hero-copy h1 {
   margin: 8px 0 12px;
-  font-size: 2.4rem;
-}
-
-.hero p {
-  max-width: 760px;
-  margin: 0;
-  line-height: 1.6;
-}
-
-.eyebrow {
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  line-height: 0.95;
   letter-spacing: 0;
 }
 
-.use-case {
-  margin-top: 28px;
+.hero-copy p {
+  max-width: 700px;
+  margin: 0;
+  color: var(--muted-strong);
+  font-size: 1.05rem;
+  line-height: 1.7;
 }
 
-.use-case > h2 {
-  margin-bottom: 8px;
+.eyebrow,
+.section-kicker,
+.metric-label {
+  margin: 0;
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
-.use-case > p {
-  margin-top: 0;
-  color: #475569;
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.status-pill,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 28px;
+  padding: 5px 10px;
+  color: var(--muted-strong);
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.status-pill.online,
+.badge.income {
+  color: #a7f3d0;
+  background: rgba(53, 211, 153, 0.13);
+  border-color: rgba(53, 211, 153, 0.35);
+}
+
+.badge.expense {
+  color: #fecdd3;
+  background: rgba(251, 113, 133, 0.13);
+  border-color: rgba(251, 113, 133, 0.35);
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric-card {
+  display: grid;
+  align-content: space-between;
+  min-height: 143px;
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.metric-card strong {
+  margin-top: 18px;
+  font-size: clamp(1.6rem, 3vw, 2.35rem);
+  line-height: 1;
+}
+
+.metric-card small {
+  margin-top: 8px;
+  color: var(--red);
+}
+
+.metric-card.income {
+  border-color: rgba(53, 211, 153, 0.35);
+}
+
+.metric-card.expense {
+  border-color: rgba(251, 113, 133, 0.35);
+}
+
+.metric-card.balance {
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+.metric-card.count {
+  border-color: rgba(167, 139, 250, 0.35);
+}
+
+.dashboard-section {
+  margin-top: 34px;
+  scroll-margin-top: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.section-header h2 {
+  margin: 4px 0 0;
+  font-size: clamp(1.55rem, 3vw, 2.25rem);
+}
+
+.section-header p {
+  max-width: 430px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
 }
 
 .panel-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
   gap: 16px;
 }
 
-.panel-grid > section {
-  min-width: 0;
-  padding: 20px;
-  background: white;
-  border: 1px solid #d7dee8;
-  border-radius: 8px;
+.transaction-grid {
+  grid-template-columns: minmax(280px, 0.8fr) minmax(420px, 1.2fr);
 }
 
 .compact {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.panel-grid > section,
+.priority-card,
+.wide-card {
+  min-width: 0;
+  padding: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+    var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
+
+.priority-card {
+  border-color: rgba(53, 211, 153, 0.36);
+}
+
 h2 {
   margin-top: 0;
 }
 
+section > h2 {
+  margin-bottom: 14px;
+  font-size: 1.15rem;
+}
+
+.card-title-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.card-title-row h2 {
+  margin: 0;
+}
+
 form {
   display: grid;
-  gap: 12px;
+  gap: 13px;
 }
 
 label {
   display: grid;
-  gap: 6px;
-  font-weight: 700;
+  gap: 7px;
+  color: var(--muted-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 input,
 select,
 button {
   width: 100%;
-  min-height: 40px;
-  padding: 9px 10px;
-  border: 1px solid #b9c4d2;
-  border-radius: 6px;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: var(--text);
+  background: #0b1220;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
   font: inherit;
 }
 
+input::placeholder {
+  color: #61708a;
+}
+
+select {
+  color: var(--text);
+}
+
+input:focus,
+select:focus {
+  border-color: rgba(53, 211, 153, 0.7);
+  box-shadow: 0 0 0 3px rgba(53, 211, 153, 0.12);
+  outline: none;
+}
+
 button {
-  color: white;
-  background: #1f7a5c;
+  color: #03130d;
+  background: linear-gradient(180deg, #45e1a8, var(--green));
   border: 0;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 900;
+  letter-spacing: 0;
+  box-shadow: 0 12px 26px rgba(53, 211, 153, 0.22);
+}
+
+button:hover {
+  transform: translateY(-1px);
 }
 
 button:disabled {
   cursor: wait;
   opacity: 0.75;
+  transform: none;
 }
 
 ul {
   display: grid;
   gap: 10px;
-  padding-left: 18px;
-  margin-bottom: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
 li {
@@ -232,30 +548,149 @@ li {
 
 .list-value {
   display: block;
+  color: var(--muted-strong);
+}
+
+.list-value strong {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.success,
+.error {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 800;
 }
 
 .success {
-  color: #146c43;
-  font-weight: 700;
+  color: #a7f3d0;
+  background: rgba(53, 211, 153, 0.12);
+  border: 1px solid rgba(53, 211, 153, 0.28);
 }
 
 .error {
-  color: #b42318;
-  font-weight: 700;
+  color: #fecdd3;
+  background: rgba(251, 113, 133, 0.12);
+  border: 1px solid rgba(251, 113, 133, 0.28);
 }
 
-@media (max-width: 640px) {
-  main {
-    width: min(100% - 20px, 1120px);
-    padding-top: 16px;
+.empty-state,
+.loading-state {
+  margin: 0;
+  padding: 18px;
+  color: var(--muted);
+  background: rgba(148, 163, 184, 0.07);
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+}
+
+.transaction-list {
+  display: grid;
+  gap: 10px;
+}
+
+.transaction-row,
+.entity-row {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.transaction-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.transaction-main strong {
+  display: block;
+  color: var(--text);
+}
+
+.transaction-main small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.transaction-amount {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  font-weight: 900;
+}
+
+.transaction-amount.income {
+  color: var(--green);
+}
+
+.transaction-amount.expense {
+  color: var(--red);
+}
+
+@media (max-width: 1020px) {
+  .app-shell {
+    grid-template-columns: 1fr;
   }
 
-  .hero {
-    padding: 20px;
+  .sidebar {
+    position: static;
+    height: auto;
+    padding: 16px;
   }
 
-  .hero h1 {
-    font-size: 2rem;
+  .side-nav {
+    grid-template-columns: repeat(5, minmax(max-content, 1fr));
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .dashboard-main {
+    padding: 20px 16px 36px;
+  }
+
+  .hero-section,
+  .transaction-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .brand {
+    align-items: flex-start;
+  }
+
+  .side-nav {
+    grid-template-columns: repeat(5, max-content);
+  }
+
+  .hero-copy {
+    min-height: auto;
+    padding: 22px;
+  }
+
+  .overview-grid,
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    display: grid;
+    gap: 8px;
+    align-items: start;
+  }
+
+  .transaction-row {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-amount {
+    justify-items: start;
   }
 }
 </style>

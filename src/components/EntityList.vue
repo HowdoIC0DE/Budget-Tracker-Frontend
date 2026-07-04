@@ -55,15 +55,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section>
-    <h2>{{ title }}</h2>
+  <section class="entity-panel">
+    <div class="card-title-row">
+      <h2>{{ title }}</h2>
+    </div>
 
-    <p v-if="isLoading">Daten werden geladen...</p>
+    <p v-if="isLoading" class="loading-state">Daten werden geladen...</p>
     <p v-else-if="error" class="error">{{ error }}</p>
-    <p v-else-if="items.length === 0">{{ emptyText }}</p>
+    <p v-else-if="items.length === 0" class="empty-state">{{ emptyText }}</p>
 
     <ul v-else>
-      <li v-for="(item, index) in items" :key="item.id ?? index">
+      <li v-for="(item, index) in items" :key="item.id ?? index" class="entity-row">
         <span v-for="field in fields" :key="field.label" class="list-value">
           <strong>{{ field.label }}:</strong> {{ displayValue(item, field) }}
         </span>

@@ -18,7 +18,7 @@ describe('App', () => {
 
     expect(wrapper.text()).toContain('Budget Tracker')
     expect(wrapper.text()).toContain('Einnahmen und Ausgaben')
-    expect(wrapper.text()).toContain('Kategorien und Konten')
-    expect(wrapper.text()).toContain('Budgets und Sparziele')
+    expect(wrapper.text()).toContain('Kategorien & Konten')
+    expect(wrapper.text()).toContain('Budgets & Sparziele')
   })
 })

@@ -24,16 +24,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section>
-    <h2>Kategorien</h2>
+  <section class="entity-panel">
+    <div class="card-title-row">
+      <h2>Kategorien</h2>
+    </div>
 
-    <p v-if="isLoading">Kategorien werden geladen...</p>
+    <p v-if="isLoading" class="loading-state">Kategorien werden geladen...</p>
     <p v-else-if="error" class="error">{{ error }}</p>
-    <p v-else-if="categories.length === 0">Noch keine Kategorien vorhanden.</p>
+    <p v-else-if="categories.length === 0" class="empty-state">
+      Noch keine Kategorien vorhanden.
+    </p>
 
     <ul v-else>
-      <li v-for="category in categories" :key="category.id">
-        {{ category.name || 'Ohne Namen' }} - {{ formatType(category.type) }}
+      <li v-for="category in categories" :key="category.id" class="entity-row">
+        <span class="list-value">
+          <strong>Name:</strong> {{ category.name || 'Ohne Namen' }}
+        </span>
+        <span class="badge" :class="category.type === 'INCOME' ? 'income' : 'expense'">
+          {{ formatType(category.type) }}
+        </span>
       </li>
     </ul>
   </section>
