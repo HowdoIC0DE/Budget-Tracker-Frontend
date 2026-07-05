@@ -3,7 +3,7 @@ import EntityList from './EntityList.vue'
 import { formatAmount, formatType } from './listFormatters'
 
 const fields = [
-  { label: 'Titel', keys: ['title', 'name'] },
+  { label: 'Zahlung', keys: ['title', 'name'] },
   { label: 'Betrag', keys: ['amount'], format: formatAmount },
   { label: 'Art', keys: ['type'], format: formatType },
   { label: 'Intervall', keys: ['interval', 'frequency'] }
@@ -13,8 +13,8 @@ const fields = [
 <template>
   <EntityList
     endpoint="/recurring-transactions"
-    title="Wiederkehrende Transaktionen"
-    empty-text="Noch keine wiederkehrenden Transaktionen vorhanden."
+    title="Wiederkehrende Zahlungen"
+    empty-text="Noch keine wiederkehrenden Zahlungen vorhanden."
     :fields="fields"
   />
 </template>

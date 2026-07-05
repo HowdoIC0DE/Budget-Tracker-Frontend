@@ -35,11 +35,12 @@ onMounted(async () => {
       Noch keine Kategorien vorhanden.
     </p>
 
-    <ul v-else>
+    <ul v-else class="entity-list">
       <li v-for="category in categories" :key="category.id" class="entity-row">
-        <span class="list-value">
-          <strong>Name:</strong> {{ category.name || 'Ohne Namen' }}
-        </span>
+        <div class="entity-main">
+          <strong>{{ category.name || 'Ohne Namen' }}</strong>
+          <small>Kategorie</small>
+        </div>
         <span class="badge" :class="category.type === 'INCOME' ? 'income' : 'expense'">
           {{ formatType(category.type) }}
         </span>

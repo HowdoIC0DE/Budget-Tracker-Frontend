@@ -42,6 +42,14 @@ function displayValue(item, field) {
   return value === null || value === '' ? '-' : value
 }
 
+function badgeClass(field, item) {
+  if (field.badgeClass) {
+    return field.badgeClass(findValue(item, field), item)
+  }
+
+  return ''
+}
+
 onMounted(async () => {
   try {
     const data = await getItems(props.endpoint)
@@ -64,11 +72,24 @@ onMounted(async () => {
     <p v-else-if="error" class="error">{{ error }}</p>
     <p v-else-if="items.length === 0" class="empty-state">{{ emptyText }}</p>
 
-    <ul v-else>
+    <ul v-else class="entity-list">
       <li v-for="(item, index) in items" :key="item.id ?? index" class="entity-row">
-        <span v-for="field in fields" :key="field.label" class="list-value">
-          <strong>{{ field.label }}:</strong> {{ displayValue(item, field) }}
-        </span>
+        <div class="entity-main">
+          <strong>{{ displayValue(item, fields[0]) }}</strong>
+          <small v-if="fields[0]?.label">{{ fields[0].label }}</small>
+        </div>
+
+        <div v-if="fields.length > 1" class="entity-meta">
+          <span
+            v-for="field in fields.slice(1)"
+            :key="field.label"
+            class="meta-pill"
+            :class="badgeClass(field, item)"
+          >
+            <span>{{ field.label }}</span>
+            <strong>{{ displayValue(item, field) }}</strong>
+          </span>
+        </div>
       </li>
     </ul>
   </section>

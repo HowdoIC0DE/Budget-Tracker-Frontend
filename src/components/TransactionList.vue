@@ -13,6 +13,16 @@ function transactionKind(type) {
   return ''
 }
 
+function transactionMeta(transaction) {
+  return [
+    transaction.categoryName || (transaction.categoryId ? `Kategorie ${transaction.categoryId}` : ''),
+    transaction.accountName || (transaction.accountId ? `Konto ${transaction.accountId}` : ''),
+    transaction.paymentMethodName ||
+      (transaction.paymentMethodId ? `Zahlungsart ${transaction.paymentMethodId}` : ''),
+    transaction.merchantName || (transaction.merchantId ? `Händler ${transaction.merchantId}` : '')
+  ].filter(Boolean)
+}
+
 onMounted(async () => {
   try {
     const data = await getItems('/transactions')
@@ -50,6 +60,12 @@ onMounted(async () => {
         <div class="transaction-main">
           <strong>{{ transaction.title || 'Ohne Titel' }}</strong>
           <small>{{ formatDate(transaction.date) }} · {{ formatType(transaction.type) }}</small>
+          <div v-if="transactionMeta(transaction).length" class="transaction-meta">
+            <span v-for="meta in transactionMeta(transaction)" :key="meta">{{ meta }}</span>
+          </div>
+          <p v-if="transaction.note" class="transaction-note">
+            {{ transaction.note }}
+          </p>
         </div>
 
         <div class="transaction-amount" :class="transactionKind(transaction.type)">

@@ -17,8 +17,9 @@ describe('App', () => {
     const wrapper = mount(App)
 
     expect(wrapper.text()).toContain('Budget Tracker')
-    expect(wrapper.text()).toContain('Einnahmen und Ausgaben')
-    expect(wrapper.text()).toContain('Kategorien & Konten')
-    expect(wrapper.text()).toContain('Budgets & Sparziele')
+    expect(wrapper.text()).toContain('Transaktionen')
+    expect(wrapper.text()).toContain('Geld verwalten')
+    expect(wrapper.text()).toContain('Planung')
+    expect(wrapper.text()).toContain('Tags')
   })
 })

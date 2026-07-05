@@ -7,6 +7,8 @@ const emit = defineEmits(['saved'])
 const name = ref('')
 const amount = ref('')
 const categoryId = ref('')
+const startDate = ref('')
+const endDate = ref('')
 const message = ref('')
 const error = ref('')
 const isSaving = ref(false)
@@ -25,12 +27,22 @@ async function createBudget() {
     payload.categoryId = Number(categoryId.value)
   }
 
+  if (startDate.value) {
+    payload.startDate = startDate.value
+  }
+
+  if (endDate.value) {
+    payload.endDate = endDate.value
+  }
+
   try {
     await createItem('/budgets', payload)
 
     name.value = ''
     amount.value = ''
     categoryId.value = ''
+    startDate.value = ''
+    endDate.value = ''
     message.value = 'Gespeichert'
     emit('saved')
   } catch (err) {
@@ -60,6 +72,18 @@ async function createBudget() {
         Kategorie-ID (optional)
         <input v-model="categoryId" type="number" min="1" placeholder="z. B. 1" />
       </label>
+
+      <div class="form-grid">
+        <label>
+          Startdatum
+          <input v-model="startDate" type="date" />
+        </label>
+
+        <label>
+          Enddatum
+          <input v-model="endDate" type="date" />
+        </label>
+      </div>
 
       <button type="submit" :disabled="isSaving">
         {{ isSaving ? 'Speichert...' : 'Speichern' }}

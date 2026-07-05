@@ -2,7 +2,7 @@
 import EntityList from './EntityList.vue'
 
 const fields = [
-  { label: 'Name', keys: ['name', 'merchantName'] },
+  { label: 'Händler', keys: ['name', 'merchantName'] },
   { label: 'Kategorie', keys: ['categoryName', 'categoryId', 'category'] }
 ]
 </script>

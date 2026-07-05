@@ -9,20 +9,24 @@ import AccountForm from './components/AccountForm.vue'
 import AccountList from './components/AccountList.vue'
 import BudgetForm from './components/BudgetForm.vue'
 import BudgetList from './components/BudgetList.vue'
-import BudgetPeriodList from './components/BudgetPeriodList.vue'
+import GoalContributionForm from './components/GoalContributionForm.vue'
+import GoalContributionList from './components/GoalContributionList.vue'
 import RecurringTransactionList from './components/RecurringTransactionList.vue'
-import SavingGoalForm from './components/SavingGoalForm.vue'
-import SavingGoalList from './components/SavingGoalList.vue'
+import SavingsGoalForm from './components/SavingsGoalForm.vue'
+import SavingsGoalList from './components/SavingsGoalList.vue'
 import PaymentMethodList from './components/PaymentMethodList.vue'
 import MerchantList from './components/MerchantList.vue'
-import TransactionNoteList from './components/TransactionNoteList.vue'
+import TagForm from './components/TagForm.vue'
+import TagList from './components/TagList.vue'
 
 const dashboardKey = ref(0)
 const transactionListKey = ref(0)
 const categoryListKey = ref(0)
 const accountListKey = ref(0)
 const budgetListKey = ref(0)
-const savingGoalListKey = ref(0)
+const savingsGoalListKey = ref(0)
+const goalContributionListKey = ref(0)
+const tagListKey = ref(0)
 
 function refreshTransactionData() {
   dashboardKey.value += 1
@@ -41,8 +45,17 @@ function refreshBudgetList() {
   budgetListKey.value += 1
 }
 
-function refreshSavingGoalList() {
-  savingGoalListKey.value += 1
+function refreshSavingsGoalList() {
+  savingsGoalListKey.value += 1
+}
+
+function refreshGoalContributionData() {
+  goalContributionListKey.value += 1
+  savingsGoalListKey.value += 1
+}
+
+function refreshTagList() {
+  tagListKey.value += 1
 }
 </script>
 
@@ -58,21 +71,21 @@ function refreshSavingGoalList() {
       </div>
 
       <nav class="side-nav" aria-label="Hauptnavigation">
-        <a href="#uebersicht">Übersicht</a>
+        <a href="#dashboard">Dashboard</a>
         <a href="#transaktionen">Transaktionen</a>
-        <a href="#kategorien-konten">Kategorien & Konten</a>
-        <a href="#budgets-sparziele">Budgets & Sparziele</a>
-        <a href="#weitere-daten">Weitere Daten</a>
+        <a href="#geld-verwalten">Geld verwalten</a>
+        <a href="#planung">Planung</a>
+        <a href="#organisation">Organisation</a>
       </nav>
     </aside>
 
     <main class="dashboard-main">
-      <section id="uebersicht" class="hero-section">
+      <section id="dashboard" class="hero-section">
         <div class="hero-copy">
           <p class="eyebrow">WebTech Projekt</p>
           <h1>Budget Tracker</h1>
           <p>
-            Ein kompaktes Finanz-Dashboard für Transaktionen, Konten, Budgets und Sparziele.
+            Ein kompaktes Finanz-Dashboard für Transaktionen, Geldverwaltung, Planung und Tags.
           </p>
           <div class="hero-actions" aria-label="Projektstatus">
             <span class="status-pill online">Backend verbunden</span>
@@ -89,7 +102,7 @@ function refreshSavingGoalList() {
             <span class="section-kicker">Wichtigster Ablauf</span>
             <h2>Transaktionen</h2>
           </div>
-          <p>Einnahmen und Ausgaben erfassen, prüfen und im Blick behalten.</p>
+          <p>Einnahmen und Ausgaben mit Kategorie, Konto, Zahlungsart, Händler und Notiz erfassen.</p>
         </div>
 
         <div class="panel-grid transaction-grid">
@@ -98,55 +111,57 @@ function refreshSavingGoalList() {
         </div>
       </section>
 
-      <section id="kategorien-konten" class="dashboard-section">
+      <section id="geld-verwalten" class="dashboard-section">
         <div class="section-header">
           <div>
-            <span class="section-kicker">Struktur</span>
-            <h2>Kategorien & Konten</h2>
+            <span class="section-kicker">Stammdaten</span>
+            <h2>Geld verwalten</h2>
           </div>
-          <p>Kategorien ordnen Ausgaben ein. Konten zeigen, wo Geld liegt.</p>
+          <p>Kategorien, Konten, Zahlungsarten und Händler bilden die Grundlage der Buchungen.</p>
         </div>
 
-        <div class="panel-grid">
+        <div class="panel-grid management-grid">
           <CategoryForm @saved="refreshCategoryList" />
           <CategoryList :key="categoryListKey" />
           <AccountForm @saved="refreshAccountList" />
           <AccountList :key="accountListKey" />
+          <PaymentMethodList />
+          <MerchantList />
         </div>
       </section>
 
-      <section id="budgets-sparziele" class="dashboard-section">
+      <section id="planung" class="dashboard-section">
         <div class="section-header">
           <div>
             <span class="section-kicker">Planung</span>
-            <h2>Budgets & Sparziele</h2>
+            <h2>Planung</h2>
           </div>
-          <p>Limits planen, Fortschritt sichtbar machen und Ziele festhalten.</p>
+          <p>Budgets, Sparziele, Einzahlungen und wiederkehrende Zahlungen zusammen planen.</p>
         </div>
 
-        <div class="panel-grid">
+        <div class="panel-grid planning-grid">
           <BudgetForm @saved="refreshBudgetList" />
           <BudgetList :key="budgetListKey" />
-          <SavingGoalForm @saved="refreshSavingGoalList" />
-          <SavingGoalList :key="savingGoalListKey" />
+          <SavingsGoalForm @saved="refreshSavingsGoalList" />
+          <SavingsGoalList :key="savingsGoalListKey" />
+          <GoalContributionForm @saved="refreshGoalContributionData" />
+          <GoalContributionList :key="goalContributionListKey" />
+          <RecurringTransactionList />
         </div>
       </section>
 
-      <section id="weitere-daten" class="dashboard-section">
-        <div class="section-header compact-header">
+      <section id="organisation" class="dashboard-section">
+        <div class="section-header">
           <div>
-            <span class="section-kicker">Erweitertes Backend</span>
-            <h2>Weitere Daten</h2>
+            <span class="section-kicker">Organisation</span>
+            <h2>Tags</h2>
           </div>
-          <p>Kompakte Übersicht über zusätzliche Budget-Tracker-Entitäten.</p>
+          <p>Tags helfen, Transaktionen später zusätzlich zu gruppieren.</p>
         </div>
 
-        <div class="panel-grid compact">
-          <BudgetPeriodList />
-          <RecurringTransactionList />
-          <PaymentMethodList />
-          <MerchantList />
-          <TransactionNoteList />
+        <div class="panel-grid organisation-grid">
+          <TagForm @saved="refreshTagList" />
+          <TagList :key="tagListKey" />
         </div>
       </section>
     </main>
@@ -324,7 +339,8 @@ a {
 }
 
 .status-pill,
-.badge {
+.badge,
+.meta-pill {
   display: inline-flex;
   align-items: center;
   width: fit-content;
@@ -339,13 +355,15 @@ a {
 }
 
 .status-pill.online,
-.badge.income {
+.badge.income,
+.meta-pill.income {
   color: #a7f3d0;
   background: rgba(53, 211, 153, 0.13);
   border-color: rgba(53, 211, 153, 0.35);
 }
 
-.badge.expense {
+.badge.expense,
+.meta-pill.expense {
   color: #fecdd3;
   background: rgba(251, 113, 133, 0.13);
   border-color: rgba(251, 113, 133, 0.35);
@@ -413,7 +431,7 @@ a {
 }
 
 .section-header p {
-  max-width: 430px;
+  max-width: 460px;
   margin: 0;
   color: var(--muted);
   line-height: 1.55;
@@ -429,8 +447,13 @@ a {
   grid-template-columns: minmax(280px, 0.8fr) minmax(420px, 1.2fr);
 }
 
-.compact {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+.management-grid,
+.planning-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.organisation-grid {
+  grid-template-columns: minmax(280px, 0.8fr) minmax(320px, 1.2fr);
 }
 
 .panel-grid > section,
@@ -474,6 +497,12 @@ section > h2 {
 form {
   display: grid;
   gap: 13px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 label {
@@ -546,17 +575,6 @@ li {
   line-height: 1.5;
 }
 
-.list-value {
-  display: block;
-  color: var(--muted-strong);
-}
-
-.list-value strong {
-  color: var(--muted);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-}
-
 .success,
 .error {
   margin: 14px 0 0;
@@ -587,7 +605,8 @@ li {
   border-radius: 8px;
 }
 
-.transaction-list {
+.transaction-list,
+.entity-list {
   display: grid;
   gap: 10px;
 }
@@ -607,15 +626,60 @@ li {
   align-items: center;
 }
 
+.entity-row {
+  align-content: start;
+}
+
+.entity-main strong,
 .transaction-main strong {
   display: block;
   color: var(--text);
 }
 
+.entity-main small,
 .transaction-main small {
   display: block;
   margin-top: 4px;
   color: var(--muted);
+}
+
+.entity-meta,
+.transaction-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.meta-pill {
+  gap: 6px;
+}
+
+.meta-pill > span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.meta-pill > strong {
+  color: var(--text);
+}
+
+.transaction-meta span,
+.transaction-note {
+  width: fit-content;
+  margin: 0;
+  padding: 4px 8px;
+  color: var(--muted-strong);
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.transaction-note {
+  margin-top: 8px;
+  border-radius: 8px;
 }
 
 .transaction-amount {
@@ -655,7 +719,8 @@ li {
   }
 
   .hero-section,
-  .transaction-grid {
+  .transaction-grid,
+  .organisation-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -675,7 +740,8 @@ li {
   }
 
   .overview-grid,
-  .panel-grid {
+  .panel-grid,
+  .form-grid {
     grid-template-columns: 1fr;
   }
 

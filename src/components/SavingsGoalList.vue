@@ -3,7 +3,7 @@ import EntityList from './EntityList.vue'
 import { formatAmount } from './listFormatters'
 
 const fields = [
-  { label: 'Name', keys: ['name', 'title'] },
+  { label: 'Sparziel', keys: ['name', 'title'] },
   { label: 'Zielbetrag', keys: ['targetAmount', 'amount', 'goalAmount'], format: formatAmount },
   { label: 'Aktuell', keys: ['currentAmount', 'savedAmount'], format: formatAmount }
 ]

@@ -1,11 +1,13 @@
 <script setup>
 import EntityList from './EntityList.vue'
-import { formatAmount } from './listFormatters'
+import { formatAmount, formatDate } from './listFormatters'
 
 const fields = [
-  { label: 'Name', keys: ['name', 'title'] },
+  { label: 'Budget', keys: ['name', 'title'] },
   { label: 'Betrag', keys: ['amount', 'limit', 'budgetAmount'], format: formatAmount },
-  { label: 'Kategorie', keys: ['categoryName', 'categoryId', 'category'] }
+  { label: 'Kategorie', keys: ['categoryName', 'categoryId', 'category'] },
+  { label: 'Start', keys: ['startDate', 'periodStart'], format: formatDate },
+  { label: 'Ende', keys: ['endDate', 'periodEnd'], format: formatDate }
 ]
 </script>
 
